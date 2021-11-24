@@ -1,0 +1,33 @@
+version: '2'
+services:
+    db_postgres:
+        image: "postgres:12.3-alpine"
+        ports:
+            - 5432:5432
+        environment:
+            POSTGRES_DB: crm_agile
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+        container_name: db_postgres
+        networks:
+            - agile
+    crm_agile:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+            - DJANGO_SETTINGS_MODULE=crm_agile.settings
+        hostname: crm_agile
+        command: python manage.py runserver 0.0.0.0:8005
+        volumes:
+            - .:/code
+        ports:
+            - '8005:8005'
+        container_name: crm_agile
+        depends_on:
+            - db_postgres
+        networks:
+            - agile
+networks:
+    agile:
+        name: agile_network
