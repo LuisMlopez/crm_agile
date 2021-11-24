@@ -40,6 +40,9 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
+
+    'users',
+    'customers',
 ]
 
 MIDDLEWARE = [
@@ -140,3 +143,5 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissions'
     ]
 }
+
+AUTH_USER_MODEL = 'users.CustomUser'
