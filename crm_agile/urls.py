@@ -19,6 +19,7 @@ from rest_framework.documentation import include_docs_urls
 
 urlpatterns_api = [
     path('api/', include('customers.urls')),
+    path('api/', include('users.urls')),
 ]
 
 urlpatterns = [

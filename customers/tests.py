@@ -2,7 +2,6 @@ import json
 
 from django.test import TestCase
 from django.contrib.auth.models import User
-import customers
 from rest_framework.test import APIClient
 
 from customers.models import Customer
@@ -11,7 +10,7 @@ from customers.models import Customer
 class CustomerTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.superuser = User(username='superuser', password='superuser', is_superuser=True)
+        cls.superuser = User(username='superuser', password='superuser', is_staff=True)
         cls.superuser.save()
 
         cls.user = User(username='test', password='test')
