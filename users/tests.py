@@ -155,3 +155,24 @@ class UsersTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
         self.assertTrue(User.objects.get(id=self.user.id).is_staff)
+
+    def test_user_delete_service_forbidden_no_token(self):
+        # Stop including any credentials
+        self.client.credentials()
+        
+        response = self.client.delete('/api/users/{}/'.format(self.user.id))
+        self.assertEqual(response.status_code, 401)
+
+    def test_user_delete_service_forbidden_no_staff(self):
+        # Set no admin user Token
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.user.auth_token.key)
+        
+        response = self.client.delete('/api/users/{}/'.format(self.user.id))
+        self.assertEqual(response.status_code, 403)
+
+    def test_user_delete_service(self):      
+        response = self.client.delete('/api/users/{}/'.format(self.user.id))
+        self.assertEqual(response.status_code, 204)
+
+        self.assertFalse(User.objects.filter(id=self.user.id).exists())
+        self.assertFalse(Token.objects.filter(user_id=self.user.id).exists())
