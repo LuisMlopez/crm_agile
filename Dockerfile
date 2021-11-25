@@ -17,3 +17,5 @@ RUN pip install -r requirements.txt
 RUN pip install debugpy -t /tmp
 
 ADD . /code/
+
+CMD python3 manage.py runserver 0.0.0.0:$PORT
