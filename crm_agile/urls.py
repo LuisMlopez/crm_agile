@@ -24,5 +24,7 @@ urlpatterns_api = [
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('docs/', include_docs_urls(title='CRM Agile', patterns=urlpatterns_api)),
+    path('api/docs/', include_docs_urls(title='CRM Agile', patterns=urlpatterns_api)),
 ]
+
+urlpatterns += urlpatterns_api
