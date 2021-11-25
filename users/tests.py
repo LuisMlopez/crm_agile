@@ -48,3 +48,40 @@ class UsersTests(TestCase):
 
         content = json.loads(response.content)
         self.assertEqual(len(content), current_users_amount)
+
+    def test_user_create_service_forbidden_no_token(self):
+        # Stop including any credentials
+        self.client.credentials()
+
+        payload = {
+            'username': 'Pepe',
+            'password': '12345'
+        }
+        
+        response = self.client.post('/api/users/', payload, format='json')
+        self.assertEqual(response.status_code, 401)
+
+    def test_user_create_service_forbidden_no_staff(self):
+        # Set no admin user Token
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.user.auth_token.key)
+
+        payload = {
+            'username': 'Pepe',
+            'password': '12345'
+        }
+        
+        response = self.client.post('/api/users/', payload, format='json')
+        self.assertEqual(response.status_code, 403)
+
+    def test_user_create_service(self):
+        payload = {
+            'username': 'Pepe',
+            'password': '12345'
+        }
+
+        self.assertFalse(User.objects.filter(username=payload.get('username')).exists())
+        
+        response = self.client.post('/api/users/', payload, format='json')
+        self.assertEqual(response.status_code, 201)
+
+        self.assertTrue(User.objects.filter(username=payload.get('username')).exists())
