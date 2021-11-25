@@ -205,5 +205,4 @@ class CustomerTests(TestCase):
         self.assertEqual(response.status_code, 201)
 
         customer = Customer.objects.get(name=payload.get('name'))
-        import pdb; pdb.set_trace()
         self.assertIsNotNone(customer.photo)
