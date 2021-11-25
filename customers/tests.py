@@ -2,6 +2,7 @@ import json
 
 from django.test import TestCase
 from django.contrib.auth.models import User
+import customers
 from rest_framework.test import APIClient
 
 from customers.models import Customer
@@ -86,3 +87,54 @@ class CustomerTests(TestCase):
 
         self.assertEqual(customer.created_by, self.user)
         self.assertEqual(customer.updated_by, self.user)
+
+    def test_customer_update_service_forbidden(self):
+        # Stop including any credentials
+        self.client.credentials()
+
+        customer = Customer(
+            name='Customer 1', surname='test', created_by=self.superuser, updated_by=self.superuser
+        )
+        customer.save()
+
+        current_name = customer.name
+
+        payload = {
+            'name': 'Pepe',
+            'surname': 'Flores'
+        }
+        
+        response = self.client.put('/api/customers/{}/'.format(customer.id), payload, format='json')
+        self.assertEqual(response.status_code, 401)
+
+        customer.refresh_from_db()
+
+        self.assertEqual(customer.name, current_name)
+
+    def test_customer_update_service(self):
+        customer = Customer(
+            name='Customer 1', surname='test', created_by=self.superuser, updated_by=self.superuser
+        )
+        customer.save()
+
+        self.assertEqual(customer.updated_by, self.superuser)
+
+        current_name = customer.name
+
+        payload = {
+            'name': 'Pepe',
+            'surname': 'Flores'
+        }
+        
+        response = self.client.put('/api/customers/{}/'.format(customer.id), payload, format='json')
+        self.assertEqual(response.status_code, 200)
+
+        customer.refresh_from_db()
+
+        # Check that user who create has not changed
+        self.assertEqual(customer.created_by, self.superuser)
+        # Check that user who update has changed
+        self.assertEqual(customer.updated_by, self.user)
+        # Check that customer name has changed
+        self.assertEqual(customer.name, payload.get('name'))
+        self.assertNotEqual(customer.name, current_name)

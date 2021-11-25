@@ -16,3 +16,8 @@ class CustomerSerializer(serializers.ModelSerializer):
         current_user = self.context.get('request').user
         validated_data.update({'created_by': current_user, 'updated_by': current_user})
         return super(CustomerSerializer, self).create(validated_data)
+
+    def update(self, instance, validated_data):
+        current_user = self.context.get('request').user
+        instance.updated_by = current_user
+        return super(CustomerSerializer, self).update(instance, validated_data)
