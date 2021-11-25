@@ -176,3 +176,11 @@ class UsersTests(TestCase):
 
         self.assertFalse(User.objects.filter(id=self.user.id).exists())
         self.assertFalse(Token.objects.filter(user_id=self.user.id).exists())
+
+    def test_users_list_service_forbbiden_user_inactive(self):
+        # Inactivate superuser
+        self.superuser.is_active = False
+        self.superuser.save()
+        
+        response = self.client.get('/api/users/')
+        self.assertEqual(response.status_code, 401)
