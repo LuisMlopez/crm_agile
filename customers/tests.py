@@ -1,8 +1,11 @@
 import json
+from io import BytesIO
 
 from django.test import TestCase
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.test import APIClient
+from PIL import Image
 
 from customers.models import Customer
 
@@ -186,3 +189,21 @@ class CustomerTests(TestCase):
         self.assertEqual(response.status_code, 204)
 
         self.assertFalse(Customer.objects.filter(id=customer.id).exists())
+
+    def test_create_customer_with_photo(self):
+        image = BytesIO()
+        Image.new('RGB', (100, 100)).save(image, 'JPEG')
+        image.seek(0)
+
+        payload = {
+            'name': 'Pepe',
+            'surname': 'Flores',
+            'photo': SimpleUploadedFile('image.jpg', image.getvalue())
+        }
+        
+        response = self.client.post('/api/customers/', payload)
+        self.assertEqual(response.status_code, 201)
+
+        customer = Customer.objects.get(name=payload.get('name'))
+        import pdb; pdb.set_trace()
+        self.assertIsNotNone(customer.photo)
