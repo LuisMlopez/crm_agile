@@ -177,6 +177,27 @@ class UsersTests(TestCase):
         self.assertFalse(User.objects.filter(id=self.user.id).exists())
         self.assertFalse(Token.objects.filter(user_id=self.user.id).exists())
 
+    def test_get_user_information_service_forbidden_no_token(self):
+        # Stop including any credentials
+        self.client.credentials()
+        
+        response = self.client.get('/api/users/{}/'.format(self.user.id))
+        self.assertEqual(response.status_code, 401)
+
+    def test_get_user_information_service_forbidden_no_staff(self):
+        # Set no admin user Token
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.user.auth_token.key)
+        
+        response = self.client.get('/api/users/{}/'.format(self.user.id))
+        self.assertEqual(response.status_code, 403)
+
+    def test_get_user_information_service(self):      
+        response = self.client.get('/api/users/{}/'.format(self.user.id))
+        self.assertEqual(response.status_code, 200)
+
+        content = json.loads(response.content)
+        self.assertEqual(content.get('id'), self.user.id)
+
     def test_users_list_service_forbbiden_user_inactive(self):
         # Inactivate superuser
         self.superuser.is_active = False
