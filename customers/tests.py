@@ -161,4 +161,29 @@ class CustomerTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
         content = json.loads(response.content)
-        self.assertEqual(content.get('name'), customer.name)        
+        self.assertEqual(content.get('name'), customer.name)
+
+    def test_delete_customer_service_forbidden(self):
+        # Stop including any credentials
+        self.client.credentials()
+
+        customer = Customer(
+            name='Customer 1', surname='test', created_by=self.superuser, updated_by=self.superuser
+        )
+        customer.save()
+        
+        response = self.client.delete('/api/customers/{}/'.format(customer.id))
+        self.assertEqual(response.status_code, 401)
+
+        self.assertTrue(Customer.objects.filter(id=customer.id).exists())
+
+    def test_delete_customer_service(self):
+        customer = Customer(
+            name='Customer 1', surname='test', created_by=self.superuser, updated_by=self.superuser
+        )
+        customer.save()
+        
+        response = self.client.delete('/api/customers/{}/'.format(customer.id))
+        self.assertEqual(response.status_code, 204)
+
+        self.assertFalse(Customer.objects.filter(id=customer.id).exists())
