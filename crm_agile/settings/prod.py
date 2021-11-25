@@ -17,4 +17,4 @@ DATABASES = {
     'default': env.db()
 }
 
-ALLOWED_HOSTS = ['https://crm-agile.herokuapp.com/']
+ALLOWED_HOSTS = ['crm-agile.herokuapp.com/']
