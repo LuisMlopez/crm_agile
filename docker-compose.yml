@@ -16,7 +16,7 @@ services:
             context: .
             dockerfile: Dockerfile
         environment:
-            - DJANGO_SETTINGS_MODULE=crm_agile.settings
+            - DJANGO_SETTINGS_MODULE=crm_agile.settings.local
         hostname: crm_agile
         command: python manage.py runserver 0.0.0.0:8005
         volumes:
