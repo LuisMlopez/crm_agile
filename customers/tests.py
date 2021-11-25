@@ -138,3 +138,27 @@ class CustomerTests(TestCase):
         # Check that customer name has changed
         self.assertEqual(customer.name, payload.get('name'))
         self.assertNotEqual(customer.name, current_name)
+
+    def test_get_customer_information_service_forbidden(self):
+        # Stop including any credentials
+        self.client.credentials()
+
+        customer = Customer(
+            name='Customer 1', surname='test', created_by=self.superuser, updated_by=self.superuser
+        )
+        customer.save()
+        
+        response = self.client.get('/api/customers/{}/'.format(customer.id))
+        self.assertEqual(response.status_code, 401)
+
+    def test_get_customer_information_service(self):
+        customer = Customer(
+            name='Customer 1', surname='test', created_by=self.superuser, updated_by=self.superuser
+        )
+        customer.save()
+        
+        response = self.client.get('/api/customers/{}/'.format(customer.id))
+        self.assertEqual(response.status_code, 200)
+
+        content = json.loads(response.content)
+        self.assertEqual(content.get('name'), customer.name)        
