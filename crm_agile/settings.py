@@ -142,7 +142,7 @@ REST_FRAMEWORK = {
     ],
     # Use Django's standard `django.contrib.auth` permissions.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissions'
+        'rest_framework.permissions.IsAuthenticated'
     ],
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }

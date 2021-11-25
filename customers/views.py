@@ -10,3 +10,8 @@ class CustomerViewSet(viewsets.ModelViewSet):
     """
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
+
+    def get_serializer_context(self):
+        context = super(CustomerViewSet, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context

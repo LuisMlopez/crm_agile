@@ -56,3 +56,33 @@ class CustomerTests(TestCase):
 
             # Check that response customers are expected
             self.assertIn(customer.get('name'), expected_customers)
+
+    def test_customer_create_service_forbidden(self):
+        # Stop including any credentials
+        self.client.credentials()
+
+        payload = {
+            'name': 'Pepe',
+            'surname': 'Flores'
+        }
+        
+        response = self.client.post('/api/customers/', payload, format='json')
+        self.assertEqual(response.status_code, 401)
+
+    def test_customer_create_service(self):
+        payload = {
+            'name': 'Pepe',
+            'surname': 'Flores'
+        }
+
+        self.assertFalse(Customer.objects.filter(name=payload.get('name')).exists())
+        
+        response = self.client.post('/api/customers/', payload, format='json')
+        self.assertEqual(response.status_code, 201)
+
+        self.assertTrue(Customer.objects.filter(name=payload.get('name')).exists())
+
+        customer = Customer.objects.get(name=payload.get('name'))
+
+        self.assertEqual(customer.created_by, self.user)
+        self.assertEqual(customer.updated_by, self.user)
