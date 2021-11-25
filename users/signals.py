@@ -6,5 +6,6 @@ from rest_framework.authtoken.models import Token
 
 @receiver(post_save, sender=User)
 def post_create_user(sender, **kwargs):
-    # Create tocket after create a new user
-    Token.objects.create(user=kwargs.get('instance'))
+    if kwargs.get('created'):
+        # Create tocket after create a new user
+        Token.objects.create(user=kwargs.get('instance'))

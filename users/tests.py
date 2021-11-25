@@ -85,3 +85,39 @@ class UsersTests(TestCase):
         self.assertEqual(response.status_code, 201)
 
         self.assertTrue(User.objects.filter(username=payload.get('username')).exists())
+
+    def test_user_update_service_forbidden_no_token(self):
+        # Stop including any credentials
+        self.client.credentials()
+
+        payload = {
+            'is_staff': True
+        }
+        
+        response = self.client.put('/api/users/{}/'.format(self.user.id), payload, format='json')
+        self.assertEqual(response.status_code, 401)
+
+    def test_user_update_service_forbidden_no_staff(self):
+        # Set no admin user Token
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.user.auth_token.key)
+
+        payload = {
+            'is_staff': True
+        }
+        
+        response = self.client.put('/api/users/{}/'.format(self.user.id), payload, format='json')
+        self.assertEqual(response.status_code, 403)
+
+    def test_user_update_service(self):
+        payload = {
+            'username': self.user.username,
+            'password': '1234',
+            'is_staff': True
+        }
+
+        self.assertFalse(self.user.is_staff)
+        
+        response = self.client.put('/api/users/{}/'.format(self.user.id), payload, format='json')
+        self.assertEqual(response.status_code, 200)
+
+        self.assertTrue(User.objects.get(id=self.user.id).is_staff)
