@@ -19,7 +19,7 @@ Yo can use the endpoint *GET* https://crm-agile.herokuapp.com/api/users/ using t
 You can use the services using a user Token. To athenticate the request, add the header **Authorization** with value **Token [TOKEN].**
 
 
-# Run project in local
+## Run project in local
 
 This repo contains all the required configuration files to run the server locally using Docker.
 Follow the next steps:
@@ -38,7 +38,7 @@ Follow the next steps:
   ```
 - Use the user created to log-in into the django admin site http://localhost:8005/admin/. Then go to the endpoint documentation page to view the available services http://localhost:8005/api/docs/
 
-# Run the tests
+## Run the tests
 
 To run the application tests, start a shell sesion inside the container and excecute the django tests:
 ```
