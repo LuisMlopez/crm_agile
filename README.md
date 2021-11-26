@@ -38,3 +38,11 @@ Follow the next steps:
   ```
 - Use the user created to log-in into the django admin site http://localhost:8005/admin/. Then go to the endpoint documentation page to view the available services http://localhost:8005/api/docs/
 
+# Run the tests
+
+To run the application tests, start a shell sesion inside the container and excecute the django tests:
+```
+docker exec -ti crm_agile bash
+python manage.py test
+```
+
