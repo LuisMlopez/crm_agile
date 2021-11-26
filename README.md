@@ -9,6 +9,7 @@ You can use the url https://crm-agile.herokuapp.com/api/ to test the services.
 To check the endpoints documentation, go to https://crm-agile.herokuapp.com/admin/ and login with:
 - user **admin**
 - password **admin1234** 
+
 Then go to https://crm-agile.herokuapp.com/api/docs/ to see the docs.
 
 Yo can use the endpoint *GET* https://crm-agile.herokuapp.com/api/users/ using the admin user token *a5fbeb0da9be3a2e4ac5311b53993f98f4cace6e* to list all available users.
