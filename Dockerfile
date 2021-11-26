@@ -9,9 +9,7 @@ RUN pip install --upgrade pip
 
 # Install requirements
 ADD requirements.txt /code/
-#ADD requirements-local.txt /code/
 RUN pip install -r requirements.txt
-#RUN pip install -r requirements-local.txt
 
 # Install debugpy for python debugging in VS code
 RUN pip install debugpy -t /tmp
