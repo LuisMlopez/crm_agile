@@ -1,4 +1,4 @@
-# crm_agile
+# CRM Agile
 
 This project exposes some services to manage users and customers.
 
