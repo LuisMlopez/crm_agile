@@ -7,15 +7,13 @@ from users.serializers import UserSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
     """
-        A ViewSet for viewing, creating and editing users.
-        Only a staff user can use this services.
-
         list:
 
         >
         > **Description**
         >
-        > Allow list all users
+        > Allow list all users.
+        > Only a staff user can use this service.
         >
 
         create:
@@ -24,6 +22,7 @@ class UserViewSet(viewsets.ModelViewSet):
         > **Description**
         >
         > Allow create a new user.
+        > Only a staff user can use this service.
         >
 
         read:
@@ -32,6 +31,7 @@ class UserViewSet(viewsets.ModelViewSet):
         > **Description**
         >
         > Read an user information using the user ID.
+        > Only a staff user can use this service.
         >
 
         update:
@@ -41,6 +41,7 @@ class UserViewSet(viewsets.ModelViewSet):
         >
         > Update an user. The username and password fields are always required. 
         > Use the partial_update method to update an user without sendig required fields.
+        > Only a staff user can use this service.
         >
 
         partial_update:
@@ -50,6 +51,7 @@ class UserViewSet(viewsets.ModelViewSet):
         >
         > Allow update an user information without sendig the required fields.
         > Use this service to change the user admin status.
+        > Only a staff user can use this service.
         >
 
         delete:
@@ -58,6 +60,7 @@ class UserViewSet(viewsets.ModelViewSet):
         > **Description**
         >
         > Allow remove an user.
+        > Only a staff user can use this service.
         >
         
     """
